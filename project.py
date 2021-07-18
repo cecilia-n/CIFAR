@@ -2,12 +2,14 @@ import numpy as np
 import pandas as pd
 from numpy import array
 from scipy.sparse.construct import rand
+from sklearn import model_selection
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.metrics import classification_report
+from sklearn.model_selection import GridSearchCV
 
 allTrainingData = pd.read_csv('./train.csv')
 allTestData = pd.read_csv('./test.csv')
@@ -29,8 +31,22 @@ encoder = OneHotEncoder()
 y_train = encoder.fit_transform(y_train.values.reshape(-1, 1)).toarray()
 y_test = encoder.fit_transform(y_test.values.reshape(-1, 1)).toarray()
 
-mlp = MLPClassifier(hidden_layer_sizes=(5,), learning_rate="constant", 
+mlp = MLPClassifier(hidden_layer_sizes=(5), learning_rate="constant", 
                     learning_rate_init=0.01, max_iter=300, activation="relu", solver="adam", random_state=1)
 
 mlp.fit(X_train, y_train)
-classification_report(y_test, mlp.predict(X_test))
+# activation = ["identity", "logistic", "tanh", "relu"]
+# solver = ["lbfgs", "sgd", "adam"]
+
+# parameter_space =  {
+#     'activation' : activation,
+#     'solver' : solver
+# }
+
+# gridSearch = GridSearchCV(mlp, param_grid = parameter_space, n_jobs=-1, cv=5)
+# gridSearch.fit(X_train, y_train)
+# params = gridSearch.best_params_
+# score = gridSearch.best_score_
+# print(params)
+# print(score)
+print(classification_report(y_test, mlp.predict(X_test)))
