@@ -24,12 +24,14 @@ y_test = X_test["label"]
 X_test.drop(labels="label", axis=1)
 
 scaler = MinMaxScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.fit_transform(X_test)
+scaler.fit(X_train)
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
 
 encoder = OneHotEncoder()
-y_train = encoder.fit_transform(y_train.values.reshape(-1, 1)).toarray()
-y_test = encoder.fit_transform(y_test.values.reshape(-1, 1)).toarray()
+encoder.fit(y_train.values.reshape(-1, 1))
+y_train = encoder.transform(y_train.values.reshape(-1, 1)).toarray()
+y_test = encoder.transform(y_test.values.reshape(-1, 1)).toarray()
 
 mlp = MLPClassifier(hidden_layer_sizes=(5), learning_rate="constant", 
                     learning_rate_init=0.01, max_iter=300, activation="relu", solver="adam", random_state=1)
